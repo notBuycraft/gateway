@@ -1,0 +1,19 @@
+{
+  "name": "account",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/notBuycraft/account.git"
+  },
+  "author": "Braden Nicholson",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/notBuycraft/account/issues"
+  },
+  "homepage": "https://github.com/notBuycraft/account#readme"
+}
