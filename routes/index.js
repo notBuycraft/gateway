@@ -18,12 +18,14 @@ router.post('/register', (req, res) => {
     if(error)
         res.status(406).json({error: "Unique indexes not used..."});
     else
-        res.status(201).json(user);
+        Token.create({user: user._id, date: new Date()}, (error, token) => {
+            res.status(201).json({token: token._id});
+        });
     });
 
 });
 
-router.post('/login', (req, res) => {
+router.post('/auth', (req, res) => {
     User.findOne({ username: req.body.username }, (error, user) => {
          if (user == null) return res.status(401).json({error: "user not found"});
          bcrypt.compare(req.body.password, user.password, function(err, isMatch) {
@@ -33,6 +35,15 @@ router.post('/login', (req, res) => {
                 });
             else
                 res.status(401).json({error: "incorrect password"});
+        });
+    });
+});
+
+router.get('/data', (req, res) => {
+    Token.findById(req.body.token, (error, token) => {
+    if(token == null) res.status(401).json({error: "invalid token"});
+        User.findById(token.user, (error, user) => {
+            res.status(200).json(user);
         });
     });
 });
