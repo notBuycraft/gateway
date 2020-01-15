@@ -1,6 +1,0 @@
-{
-  "mongo": {
-    "uri": "mongodb://account:toor@localhost:27017/es-account"
-  },
-  "port": 3002
-}
