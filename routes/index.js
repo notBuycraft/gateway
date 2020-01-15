@@ -1,44 +1,40 @@
 var express = require('express');
 var passport = require('passport');
-var Account = require('../models/user');
+var User = require('../models/user');
+var Token = require('../models/token');
+let bcrypt = require('bcrypt');
 var router = express.Router();
 
+router.post('/register', (req, res) => {
 
-router.get('/', function (req, res) {
-    res.render('index', { user : req.user });
+    let userData = {
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password,
+        date: new Date()
+    };
+
+    User.create(userData, (error, user) => {
+    if(error)
+        res.status(406).json({error: "Unique indexes not used..."});
+    else
+        res.status(201).json(user);
+    });
+
 });
 
-router.get('/register', function(req, res) {
-    res.render('register', { });
-});
-
-router.post('/register', function(req, res) {
-    Account.register(new Account({ username : req.body.username }), req.body.password, function(err, account) {
-        if (err) {
-            return res.render('register', { account : account });
-        }
-
-        passport.authenticate('local')(req, res, function () {
-            res.redirect('/');
+router.post('/login', (req, res) => {
+    User.findOne({ username: req.body.username }, (error, user) => {
+         if (user == null) return res.status(401).json({error: "user not found"});
+         bcrypt.compare(req.body.password, user.password, function(err, isMatch) {
+            if(isMatch)
+                Token.create({user: user._id, date: new Date()}, (error, token) => {
+                    res.status(202).json({token: token._id});
+                });
+            else
+                res.status(401).json({error: "incorrect password"});
         });
     });
-});
-
-router.get('/login', function(req, res) {
-    res.render('login', { user : req.user });
-});
-
-router.post('/login', passport.authenticate('local'), function(req, res) {
-    res.redirect('/');
-});
-
-router.get('/logout', function(req, res) {
-    req.logout();
-    res.redirect('/');
-});
-
-router.get('/ping', function(req, res){
-    res.status(200).send("pong!");
 });
 
 module.exports = router;

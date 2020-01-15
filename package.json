@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/notBuycraft/account/issues"
   },
-  "homepage": "https://github.com/notBuycraft/account#readme"
+  "homepage": "https://github.com/notBuycraft/account#readme",
+  "dependencies": {
+    "bcrypt": "^3.0.7",
+    "express-session": "^1.17.0",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^6.0.1"
+  }
 }

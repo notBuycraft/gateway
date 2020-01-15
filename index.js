@@ -5,11 +5,9 @@ let bodyParser = require('body-parser');
 let mongoose = require('mongoose');
 let session = require('express-session');
 let MongoStore = require('connect-mongo')(session);
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
 
 // Connect to MongoDB
-mongoose.connect(config.mongoUri, {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(config.mongo.uri, {useNewUrlParser: true, useUnifiedTopology: true});
 var db = mongoose.connection;
 mongoose.set('useCreateIndex', true);
 
@@ -18,8 +16,6 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
     console.log('Connected to MongoDB with no errors.');
 });
-
-
 
 // Use sessions for tracking login
 app.use(session({
@@ -34,18 +30,10 @@ app.use(session({
 // Parse incoming requests
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(passport.initialize());
-app.use(passport.session());
 
 // Include routes
 var routes = require('./routes/');
 app.use('/', routes);
-
-var User = require('./models/user');
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
-
 
 // Catch 404 and forward to error handler
 app.use(function (req, res, next) {
