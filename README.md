@@ -7,16 +7,22 @@
 ###### returns
 `201: { token: "token" }`
 
-`406: { error: "unique indexes not used" }`
+`{
+     "status": 406,
+     "type": "credentialInterference",
+     "message": "The provided parameters are not acceptable (In use or otherwise not available)."
+ }`
 
 #### Authenticate user; retrieve token
 `POST: /auth/ { username: "username", password: "password" }`
 ###### returns
 `202: { token: "token" }`
 
-`401: { error: "incorrect password" }`
-
-`401: { error: "user not found" }`
+`{
+     "status": 401,
+     "type": "credentialInvalid",
+     "message": "The provided parameters do not match records."
+ }`
 
 #### Get user data
 `GET: /register/ { token: "token" }`
@@ -30,6 +36,10 @@
           "date": "account creation",
       }`
       
-`401: { error: "invalid token" }`
+`{
+     "status": 401,
+     "type": "authTokenInvalid",
+     "message": "The token you provided has expired or does not exist."
+ }`
 
 
