@@ -1,4 +1,4 @@
-# account
+# gateway
 
 ### API Reference
 
